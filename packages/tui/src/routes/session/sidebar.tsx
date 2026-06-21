@@ -9,6 +9,11 @@ import { usePluginRuntime } from "../../plugin/runtime"
 import { getScrollAcceleration } from "../../util/scroll"
 import { WorkspaceLabel } from "../../component/workspace-label"
 
+export const SIDEBAR_WIDTH = 42
+export const SIDEBAR_PADDING_LEFT = 2
+export const SIDEBAR_PADDING_RIGHT = 2
+export const SIDEBAR_CONTENT_WIDTH = SIDEBAR_WIDTH - SIDEBAR_PADDING_LEFT - SIDEBAR_PADDING_RIGHT
+
 export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
   const pluginRuntime = usePluginRuntime()
   const project = useProject()
@@ -27,12 +32,12 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
     <Show when={session()}>
       <box
         backgroundColor={theme.backgroundPanel}
-        width={42}
+        width={SIDEBAR_WIDTH}
         height="100%"
         paddingTop={1}
         paddingBottom={1}
-        paddingLeft={2}
-        paddingRight={2}
+        paddingLeft={SIDEBAR_PADDING_LEFT}
+        paddingRight={SIDEBAR_PADDING_RIGHT}
         position={props.overlay ? "absolute" : "relative"}
       >
         <scrollbox

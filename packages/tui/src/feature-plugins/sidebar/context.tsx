@@ -2,6 +2,7 @@ import type { AssistantMessage } from "@opencode-ai/sdk/v2"
 import type { TuiPlugin, TuiPluginApi } from "@opencode-ai/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"
 import { createMemo } from "solid-js"
+import { SIDEBAR_CONTENT_WIDTH } from "../../routes/session/sidebar"
 
 const id = "internal:sidebar-context"
 
@@ -39,9 +40,19 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
       <text fg={theme().text}>
         <b>Context</b>
       </text>
-      <text fg={theme().textMuted}>{state().tokens.toLocaleString()} tokens</text>
-      <text fg={theme().textMuted}>{state().percent ?? 0}% used</text>
-      <text fg={theme().textMuted}>{money.format(cost())} spent</text>
+      <box flexDirection="row" justifyContent="space-between">
+        <text fg={theme().textMuted}>{state().tokens.toLocaleString()} tokens</text>
+        <text fg={theme().textMuted}>{money.format(cost())} spent</text>
+      </box>
+      <text fg={(state().percent ?? 0) > 90 ? theme().error : (state().percent ?? 0) > 70 ? theme().warning : theme().success}>
+        {(() => {
+          const percent = state().percent ?? 0
+          const percentStr = `${percent}%`
+          const barWidth = SIDEBAR_CONTENT_WIDTH - percentStr.length - 2
+          const filled = Math.round((percent / 100) * barWidth)
+          return `${"█".repeat(filled)}${"░".repeat(barWidth - filled)} ${percentStr}`
+        })()}
+      </text>
     </box>
   )
 }
